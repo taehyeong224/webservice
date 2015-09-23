@@ -2,5 +2,10 @@
 <head>
     <title></title> </head>
 <body>
-Hello,hahaaa ${textFromController} </body>
+Hello,hahaaa ${textFromController}
+<br><br>
+username = ${username}
+<br><br>
+userpass = ${userpass}
+</body>
 </html>
