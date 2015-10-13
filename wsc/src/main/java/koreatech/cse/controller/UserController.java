@@ -3,6 +3,7 @@ import koreatech.cse.dao.UserDao;
 import koreatech.cse.domain.Searchable;
 import koreatech.cse.domain.User;
 import koreatech.cse.repository.UserMapper;
+import koreatech.cse.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
@@ -21,6 +22,8 @@ import java.util.List;
     private UserDao userDao;
     @Inject
     private UserMapper userMapper;
+    @Inject
+    private UserService userService;
 
     @RequestMapping("/signup")
         public String signup(Model model) {
@@ -32,19 +35,20 @@ import java.util.List;
     @RequestMapping(value="/signup", method= RequestMethod.POST)
     @ResponseBody
     public String signup(@ModelAttribute User user, BindingResult result) {
-        if (result.hasErrors()) {
-            List<FieldError> errors = result.getFieldErrors();
-            for (FieldError error : errors ) {
-                System.out.println (error.getObjectName() + " - " + error.getDefaultMessage());
-            } }
+//        if (result.hasErrors()) {
+//            List<FieldError> errors = result.getFieldErrors();
+//            for (FieldError error : errors ) {
+//                System.out.println (error.getObjectName() + " - " + error.getDefaultMessage());
+//            } }
+//
+//
+//        System.out.println("user = " + user);
+//        userDao.add(user);
+//        userMapper.insert(user);
 
-
-        System.out.println("user = " + user);
-        userDao.add(user);
-        userMapper.insert(user);
-        double i = 3 / 0;
-        System.out.println("i = " + i);
-        return "success"; }
+        userService.signup(user);
+        return "success";
+    }
 
     @RequestMapping("/getInfo")
     @ResponseBody
@@ -52,6 +56,13 @@ import java.util.List;
         User user = userMapper.findOne(id);
         System.out.println("user = " + user);
         return "success";
+    }
+
+    @RequestMapping("/delete")
+    @ResponseBody
+    public String delete(@RequestParam("id") int id){
+        userService.delete(id);
+        return "success delete";
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
