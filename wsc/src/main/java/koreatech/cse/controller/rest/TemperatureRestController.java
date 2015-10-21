@@ -1,7 +1,6 @@
 package koreatech.cse.controller.rest;
 
 import koreatech.cse.domain.rest.Temperature;
-import koreatech.cse.domain.rest.TemperatureXml;
 import koreatech.cse.repository.rest.TemperatureMapper;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -35,19 +34,18 @@ public class TemperatureRestController {
 
     @Transactional
     @RequestMapping(value="/xml/temperature/{sensorId}", method=RequestMethod.GET, produces="application/xml")
-    public ResponseEntity<TemperatureXml> temperatureXml(@PathVariable("sensorId") String sensorId) {
+    public ResponseEntity<Temperature> temperatureXml(@PathVariable("sensorId") String sensorId) {
         Temperature temperature = temperatureMapper.findOneBySensorId(sensorId);
         if (temperature == null) {
             System.out.println("Temperature sensor with id (" + sensorId + ") is not found");
-            return new ResponseEntity<TemperatureXml>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<Temperature>(HttpStatus.NOT_FOUND);
         }
-        TemperatureXml temperatureXml = new TemperatureXml();
-        temperatureXml.setId(temperature.getId());
-        temperatureXml.setSensorId(temperature.getSensorId());
-        temperatureXml.setTemperature(temperature.getTemperature());
-        temperatureXml.setDatetime(temperature.getDatetime());
-        temperatureXml.setLocation(temperature.getLocation());
-        return new ResponseEntity<TemperatureXml>(temperatureXml, HttpStatus.OK);
+        temperature.setId(temperature.getId());
+        temperature.setSensorId(temperature.getSensorId());
+        temperature.setTemperature(temperature.getTemperature());
+        temperature.setDatetime(temperature.getDatetime());
+        temperature.setLocation(temperature.getLocation());
+        return new ResponseEntity<Temperature>(temperature, HttpStatus.OK);
     }
 
     @Transactional
@@ -62,15 +60,15 @@ public class TemperatureRestController {
     }
     @Transactional
     @RequestMapping(value="/xml/temperature/location/{location}",method = RequestMethod.GET, produces = "application/xml")
-    public ResponseEntity<List<TemperatureXml>> temperatureByLocationXml(@PathVariable("location") String location) {
+    public ResponseEntity<List<Temperature>> temperatureByLocationXml(@PathVariable("location") String location) {
         List<Temperature> temperatureList = temperatureMapper.findByLocation(location);
         if (temperatureList.size() == 0) {
             System.out.println("Temperature sensors with location of " + location + " are not found");
-            return new ResponseEntity<List<TemperatureXml>>(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<List<Temperature>>(HttpStatus.NOT_FOUND);
         }
-        List<TemperatureXml> temperatureXmlList = new LinkedList<TemperatureXml>();
+        List<Temperature> temperatureXmlList = new LinkedList<Temperature>();
         for (Temperature temperature : temperatureList) {
-            TemperatureXml temperatureXml = new TemperatureXml();
+            Temperature temperatureXml = new Temperature();
             temperatureXml.setId(temperature.getId());
             temperatureXml.setSensorId(temperature.getSensorId());
             temperatureXml.setTemperature(temperature.getTemperature());
@@ -78,7 +76,7 @@ public class TemperatureRestController {
             temperatureXml.setLocation(temperature.getLocation());
             temperatureXmlList.add(temperatureXml);
         }
-        return new ResponseEntity<List<TemperatureXml>>(temperatureXmlList, HttpStatus.OK);
+        return new ResponseEntity<List<Temperature>>(temperatureXmlList, HttpStatus.OK);
     }
 
     @Transactional

@@ -8,11 +8,11 @@ import java.util.List;
 
 @Repository
 public interface TemperatureMapper {
-    @Insert("INSERT INTO TEMPERATURE (SENSOR_ID, TEMPERATURE, DATETIME, LOCATION)                                        VALUES (#{sensorId}, #{temperature}, #{datetime}, #{location})")
+    @Insert("INSERT INTO TEMPERATURE (SENSOR_ID, TEMPERATURE, DATETIME, LOCATION) VALUES (#{sensorId}, #{temperature}, #{datetime}, #{location})")
     @SelectKey(statement = "SELECT LAST_INSERT_ID()", keyProperty = "id", before = false, resultType = int.class)
     void insert(Temperature temperature);
 
-    @Update("UPDATE TEMPERATURE SET TEMPERATURE = #{temperature}, DATETIME = #{datetime},                         LOCATION = #{location} WHERE ID = #{id}")
+    @Update("UPDATE TEMPERATURE SET TEMPERATURE = #{temperature}, DATETIME = #{datetime},LOCATION = #{location} WHERE ID = #{id}")
     void update(Temperature temperature);
 
     @Select("SELECT * FROM TEMPERATURE WHERE ID = #{id}")
