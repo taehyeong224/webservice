@@ -3,7 +3,7 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <name>Web Service and Computing -Spring</name>
+    <name>Web Service and Computing - Spring</name>
     <groupId>koreatech.cse</groupId>
     <artifactId>wsc</artifactId>
     <version>001</version>
@@ -11,13 +11,13 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <projectreporting.outputEncoding>UTF-8</projectreporting.outputEncoding>
-
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <spring-security.version>3.2.5.RELEASE</spring-security.version>
         <spring.version>4.2.0.RELEASE</spring.version>
     </properties>
 
     <dependencies>
-        <!-- Servlet-->
+        <!-- Servlet -->
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
@@ -30,13 +30,15 @@
             <version>2.2</version>
             <scope>provided</scope>
         </dependency>
+
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>jstl</artifactId>
             <version>1.2</version>
         </dependency>
 
-        <!--Spring-->
+
+        <!-- Spring -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-core</artifactId>
@@ -52,11 +54,13 @@
             <artifactId>spring-webmvc</artifactId>
             <version>${spring.version}</version>
         </dependency>
+        <!-- @Inject -->
         <dependency>
             <groupId>javax.inject</groupId>
             <artifactId>javax.inject</artifactId>
             <version>1</version>
         </dependency>
+        <!-- Spring JDBC -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-jdbc</artifactId>
@@ -85,65 +89,67 @@
             <artifactId>mybatis-spring</artifactId>
             <version>1.2.2</version>
         </dependency>
-
         <!-- Spring AOP + AspectJ -->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aop</artifactId>
             <version>4.2.0.RELEASE</version>
         </dependency>
-
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjrt</artifactId>
             <version>1.8.0</version>
         </dependency>
-
         <dependency>
             <groupId>org.aspectj</groupId>
             <artifactId>aspectjweaver</artifactId>
             <version>1.8.6</version>
         </dependency>
-
-        <!-- XML and JSON -->
+        <!-- Spring Security -->
         <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
-            <version>1.9.13</version>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>${spring-security.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.fasterxml.jackson.dataformat</groupId>
-            <artifactId>jackson-dataformat-xml</artifactId>
-            <version>2.6.2</version>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-config</artifactId>
+            <version>${spring-security.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-core</artifactId>
-            <version>2.6.2</version>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-taglibs</artifactId>
+            <version>${spring-security.version}</version>
         </dependency>
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-            <version>2.6.2</version>
-        </dependency>
-
     </dependencies>
 
     <profiles>
         <profile>
-        <id>prod</id> <properties>
-        <env>prod</env> </properties>
+            <id>prod</id>
+            <properties>
+                <env>prod</env>
+            </properties>
         </profile>
         <profile>
-        <id>dev</id> <properties>
-        <env>dev</env> </properties> <activation>
-        <activeByDefault>true</activeByDefault> </activation>
+            <id>dev</id>
+            <properties>
+                <env>dev</env>
+            </properties>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
         </profile>
     </profiles>
-    <build> <resources>
-        <resource> <directory>src/main/resources/common</directory>
-        </resource>
-        <resource>
-        <directory>src/main/resources/${env}</directory> </resource>
-    </resources> </build>
+
+    <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources/common</directory>
+            </resource>
+            <resource>
+                <directory>src/main/resources/${env}</directory>
+            </resource>
+        </resources>
+    </build>
 </project>
+

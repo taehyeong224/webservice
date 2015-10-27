@@ -1,56 +1,88 @@
 package koreatech.cse.controller;
+
 import koreatech.cse.domain.User;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/")
 public class HomeController {
-    @Value("${env.text}")
-    private String env; //properties파일에서 env.text라는 변수를 가져와라
-    //값의 형식에 따라서 변수를 만들면 자동적으로 대입
 
-    @Value("${db.username}")
-    private String username;
-    @Value("${db.password}")
-    private String password;
+    @Value("${env.text}")
+    private String env;
+
+    @ModelAttribute("name")
+    private String getName() {
+        return "IamHomeControllerModelAttribute";
+    }
+
+    public static User current() {
+        try {
+            return (User) SecurityContextHolder.getContext()
+                    .getAuthentication().getPrincipal();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
 
     @RequestMapping
     public String home(Model model) {
-        model.addAttribute("textFromController", "Worlddss안녕!!d");
-        model.addAttribute("date",new Date());
+
+        System.out.println("User : " + current());
+        model.addAttribute("textFromController", "World");
         return "hello";
     }
 
     @RequestMapping("/env")
     public String env(Model model) {
         model.addAttribute("textFromController", env);
-        model.addAttribute("username",username);
-        model.addAttribute("userpass",password);
         return "hello";
     }
 
     @RequestMapping("/requestParamTest")
-    @ResponseBody
-    public String requestParamTest(@RequestParam(name= "c", defaultValue = "haha") String b){
-        System.out.println("b : " + b);
-        return "Success";
-    }
-
-    @RequestMapping("/pathVariableTest/{a}/{b}/{c}")
-    public String pathVariableTest(Model model,
-            @PathVariable(value="a") String a, @PathVariable String b, @PathVariable int c) {
-        model.addAttribute("a", a);
-        model.addAttribute("b", b);
-        model.addAttribute("c", c);
+    public String requestParamTest(@RequestParam(name = "a", required=false, defaultValue = "0") int a,
+                                   @RequestParam("b") String b,
+                                   @RequestParam(value= "c", defaultValue = "true") boolean c) {
+        System.out.println("a = " + a);
+        System.out.println("b = " + b);
+        System.out.println("c = " + c);
         return "hello";
     }
 
+    @RequestMapping("/pathVariableTest/{a}/{b}/{c}")
+    public String pathVariableTest(@PathVariable(value="a") String a, @PathVariable String b, @PathVariable int c) {
+        System.out.println("a = " + a);
+        System.out.println("b = " + b);
+        System.out.println("c = " + c);
+        return "hello";
+    }
+
+    @RequestMapping("/requestParamMapTest")
+    public String requestParamMapTest(@RequestParam Map<String, String> map) {
+        for(Map.Entry entry: map.entrySet()) {
+            System.out.println(entry.getKey() + "=" + entry.getValue());
+        }
+        return "hello";
+    }
+
+    @RequestMapping(value = "/requestMappingGetTest",
+            method = RequestMethod.GET,
+            params ="test=true")
+    public String requestMappingGetTest(Model model) {
+        model.addAttribute("textFromController", "World");
+        return "hello";
+    }
+
+    @RequestMapping(value = "/requestMappingPostTest",
+            method = RequestMethod.POST)
+    @ResponseBody
+    public String requestMappingPostTest() {
+        return "hello";
+    }
 }
